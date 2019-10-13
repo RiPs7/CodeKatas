@@ -16,40 +16,29 @@ public class Main {
 
     private static final int RAND_STRING_LENGTH = 5;
 
+    private static final boolean MULTI_HASH_BLOOM_FILTER = false;
+
     public static void main (String[] args) {
-        long start;
-
-        // With SHA 256 and 256 space Bloom filter
-        start = System.currentTimeMillis();
         loadWordListAndCalculateFalsePositives(BloomFilterAlgorithm.SHA256);
-        // Print the performance time.
-        System.out.println("It took: " + (System.currentTimeMillis() - start) + " ms");
-
-        System.out.println("----------------------------------------");
-
-        // With SHA 512 and 65536 space Bloom filter
-        start = System.currentTimeMillis();
         loadWordListAndCalculateFalsePositives(BloomFilterAlgorithm.SHA512);
-        // Print the performance time.
-        System.out.println("It took: " + (System.currentTimeMillis() - start) + " ms");
-
-        System.out.println("----------------------------------------");
-
-        // With SHA 512 and 16777216 space Bloom filter
-        start = System.currentTimeMillis();
         loadWordListAndCalculateFalsePositives(BloomFilterAlgorithm.SHA512_EXT);
-        // Print the performance time.
-        System.out.println("It took: " + (System.currentTimeMillis() - start) + " ms");
     }
 
     private static void loadWordListAndCalculateFalsePositives (final BloomFilterAlgorithm bloomFilterAlgorithm) {
+        final long start = System.currentTimeMillis();
+
         // Part 1
         // Load the word list
         final List<String> wordList = Optional.ofNullable(readWordList())
             .orElseThrow(() -> new IllegalArgumentException("Could not read word list"));
-
         // Create a new bloom filter and add every word in the word list
-        BloomFilter bloomFilter = new BloomFilter(bloomFilterAlgorithm);
+        BloomFilter bloomFilter;
+        try {
+            bloomFilter = MULTI_HASH_BLOOM_FILTER ? new BloomFilterMultiHash(bloomFilterAlgorithm) :
+                new BloomFilterSingleHash(bloomFilterAlgorithm);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
         wordList.forEach(bloomFilter::addElement);
 
         // Part 2
@@ -67,6 +56,9 @@ public class Main {
         // Print the error rate
         System.out.println("False positive rate: " + (100.0 * falsePositives / LIMIT_RAND_STRINGS) + "% with " +
             bloomFilterAlgorithm.toString());
+        // Print performance time
+        System.out.println("It took: " + (System.currentTimeMillis() - start) + " ms");
+        System.out.println("----------------------------------------");
     }
 
     private static List<String> readWordList () {

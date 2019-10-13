@@ -1,6 +1,5 @@
 package main;
 
-import java.math.BigInteger;
 import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.util.Arrays;
@@ -9,40 +8,17 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 
-class BloomFilter {
+abstract class BloomFilter {
 
-    private boolean[] bits;
-    private MessageDigest messageDigest;
-    private int indexingChunkSize;
+    boolean[] bits;
+    MessageDigest messageDigest;
+    int indexingChunkSize;
 
-    BloomFilter (final BloomFilterAlgorithm algorithm) {
-        bits = new boolean[algorithm.getBloomFilterSize()];
-        messageDigest = algorithm.getMessageDigest();
-        indexingChunkSize = (int)log2(algorithm.getBloomFilterSize()) / 8;
-    }
+    abstract void addElement (final String element);
 
-    void addElement (final String element) {
-        final byte[] hash = messageDigest.digest(element.getBytes());
-        final List<byte[]> chunks = chunk(hash, indexingChunkSize);
-        for (final byte[] chunk : chunks) {
-            final int index = new BigInteger(1, chunk).intValue();
-            bits[index] = true;
-        }
-    }
+    abstract boolean containsElement (final String element);
 
-    boolean containsElement (final String element) {
-        final byte[] hash = messageDigest.digest(element.getBytes());
-        final List<byte[]> chunks = chunk(hash, indexingChunkSize);
-        for (final byte[] chunk : chunks) {
-            final int index = new BigInteger(1, chunk).intValue();
-            if (!bits[index]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private List<byte[]> chunk (final byte[] input, final int chunkSize) {
+    List<byte[]> chunk (final byte[] input, final int chunkSize) {
         if (chunkSize <= 0) {
             throw new InvalidParameterException("Chunk size must be greater that 0");
         }
@@ -52,7 +28,7 @@ class BloomFilter {
             .collect(toList());
     }
 
-    private double log2 (final int x) {
+    double log2 (final int x) {
         return Math.log10(x) / Math.log10(2);
     }
 
