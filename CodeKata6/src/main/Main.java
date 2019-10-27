@@ -1,28 +1,23 @@
 package main;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class Main {
 
-  public static void main (String[] args) {
-    final List<String> words = MainUtils.readLinesFromResources("word-list.txt");
-    if (words == null) {
-      System.exit(-1);
+    public static void main (String[] args) throws Exception {
+        final long start = System.currentTimeMillis();
+
+        Supplier<Void> calculateTime = () -> {
+            System.out.println(
+                "It took: " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds" + "\n\nPermutations found:");
+            return null;
+        };
+
+        Optional.ofNullable(
+            WordsFun.findPermutationsInWordList(MainUtils.readLinesFromResources("word-list.txt"), calculateTime))
+            .orElseThrow(() -> new Exception("Could not read word list"))
+            .forEach(System.out::println);
     }
-
-    final long start = System.currentTimeMillis();
-
-    final Map<Long, String> permutations = words.stream()
-        .limit(100000)
-        .map(WordsFun::getWordHash)
-        .collect(toList());
-
-    System.out.println("Found permutations: " + permutations.toString());
-
-    System.out.println("It took: " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
-  }
 
 }
