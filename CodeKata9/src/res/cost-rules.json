@@ -4,24 +4,24 @@
     "special_offer" : "3 for 130"
   },
   "B": {
-    "unit_price": 10,
-    "special_offer" : "2 for 15"
+    "unit_price": 30,
+    "special_offer" : "2 for 45"
   },
   "C": {
-    "unit_price": 15,
-    "special_offer" : "2 for 27.50"
-  },
-  "D": {
-    "unit_price": 10.99,
-    "special_offer" : "4 for 39.99"
-  },
-  "E": {
     "unit_price": 20,
     "special_offer" : ""
   },
+  "D": {
+    "unit_price": 15,
+    "special_offer" : ""
+  },
+  "E": {
+    "unit_price": 20,
+    "special_offer" : "2 for 35"
+  },
   "F": {
     "unit_price": 30.50,
-    "special_offer" : ""
+    "special_offer" : "3 for 50"
   },
   "G": {
     "unit_price": 20.19,
