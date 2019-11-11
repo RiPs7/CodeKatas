@@ -1,26 +1,16 @@
-package main;
+package main.datastructure.impl;
+
+import main.datastructure.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class BinaryTree {
+public class BinaryTree implements Tree {
 
-    private static class Node {
-        private Object value;
-        private Node left, right;
+    private BinaryNode root;
 
-        Node (Object value) {
-            this.value = value;
-        }
-    }
-
-    private Node root;
-
-    BinaryTree () {
-    }
-
-    void insert (Object value) {
-        final Node newNode = new Node(value);
+    public void insert (Object value) {
+        final BinaryNode newNode = new BinaryNode(value);
         if (root == null) {
             root = newNode;
         } else {
@@ -28,9 +18,9 @@ class BinaryTree {
         }
     }
 
-    private void insert (final Node newNode) {
+    private void insert (final BinaryNode newNode) {
         // Traverse down the tree to insert it.
-        Node current = root;
+        BinaryNode current = root;
         while (current.left != null || current.right != null) { // while at least one child is not null
             final int comparison = compare(newNode.value, current.value);
             if (current.left == null && comparison == -1) { // if the new node is meant to go left but left child is
@@ -60,13 +50,14 @@ class BinaryTree {
             // is null then insert it and break.
             current.right = newNode;
         }
+        newNode.parent = current;
     }
 
-    List<Object> traverseInOrder () {
+    public List<Object> traverseInOrder () {
         return traverseInOrderRecursive(root);
     }
 
-    private List<Object> traverseInOrderRecursive (Node node) {
+    private List<Object> traverseInOrderRecursive (BinaryNode node) {
         List<Object> traverseInOrderFromNode = new ArrayList<>();
         if (node.left != null) {
             traverseInOrderFromNode.addAll(traverseInOrderRecursive(node.left));
@@ -87,6 +78,17 @@ class BinaryTree {
             return (char) a - (char) b < 0 ? -1 : 1;
         }
         throw new IllegalArgumentException("Unrecognized argument type. Only integers and strings are supported");
+    }
+
+    static class BinaryNode {
+
+        Object value;
+        BinaryNode parent, left, right;
+
+        BinaryNode (Object value) {
+            this.value = value;
+        }
+
     }
 
 
