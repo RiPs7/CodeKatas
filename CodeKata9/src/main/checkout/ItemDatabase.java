@@ -77,7 +77,7 @@ class ItemDatabase {
         if (specialOffer == null) {
             return 0;
         }
-        return specialOffer.keySet().toArray(Integer[]::new)[0];
+        return specialOffer.keySet().toArray(new Integer[0])[0];
     }
 
     static Double getItemPriceForOffer (String sku) {
@@ -85,11 +85,11 @@ class ItemDatabase {
         if (specialOffer == null) {
             return 0.0;
         }
-        return specialOffer.values().toArray(Double[]::new)[0];
+        return specialOffer.values().toArray(new Double[0])[0];
     }
 
     static Double getItemPriceForSingleUnit (String sku) {
-        return getItem(sku).get(UNIT_PRICE).values().toArray(Double[]::new)[0];
+        return getItem(sku).get(UNIT_PRICE).values().toArray(new Double[0])[0];
     }
 
 }
