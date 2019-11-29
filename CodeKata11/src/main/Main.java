@@ -1,29 +1,37 @@
 package main;
 
-import main.rack.Rack;
-import main.rack.impl.BinaryTreeRack;
-import main.rack.impl.RedBlackTreeRack;
+import main.MainUtils.ProgressBar;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class Main {
 
-    // Parameters
-    private static final boolean EXECUTE_FIRST_PART = false;
-    private static final boolean USE_RED_BLACK_LOGIC = true;
-    private static final boolean PERFORMANCE_MEASUREMENT = false;
+    // PARAMETERS
 
-    private static Rack rack = USE_RED_BLACK_LOGIC ? new RedBlackTreeRack() : new BinaryTreeRack();
+    // Execute first part -> true, second part -> false
+    private static final boolean FIRST_PART = false;
+
+    // For second part: Execute it a lot of times to measure performance. Otherwise execute only once for P.o.C.
+    private static final boolean PERFORMANCE_MEASUREMENT = true;
+
+    // The rack
+    private static Rack rack = new Rack();
 
     public static void main (String[] args) throws Exception {
-        if (EXECUTE_FIRST_PART) {
+        if (FIRST_PART) {
             sortingBallsPart();
         } else {
             sortingCharactersPart();
         }
     }
 
+    /**
+     * FIRST PART
+     * Reads one number from standard input, adds it to the rack and prints the current rack state.
+     * If something other than a number is given, then an error message is shown and prompts for a new number.
+     */
     private static void sortingBallsPart () {
         MainUtils.readFromInputAndApplyFunction("Please enter a number. Enter an empty line to break.", (line) -> {
             try {
@@ -35,12 +43,26 @@ public class Main {
         });
     }
 
+    /**
+     * SECOND PART
+     * Reads the one line sentence from the resource file. Then if we are measuring the performance, we run the applying
+     * function a lot of times and printing the average performance. Otherwise we run it only once and print the final
+     * state.
+     * Then we have the two following scenarios for the applying function:
+     * 1. If we are measuring the performance (incrementalPrint = false):
+     * We add all the letters in the rack while also sorting them. In the end, return the concatenation of the ordered
+     * letters.
+     * 2. If we are not measuring the performance (incrementalPrint = true):
+     * For every letter, we add it in the rack and print the concatenation of the ordered letters in the current state.
+     *
+     * @throws Exception If the resource file cannot be found
+     */
     private static void sortingCharactersPart () throws Exception {
         final String sentence = Optional.ofNullable(MainUtils.readLinesFromResources("sentence.txt"))
             .orElseThrow(() -> new Exception("Could not read" + " resource"))
             .get(0);
 
-        final Function<Boolean, String> sentenceIntoRack = incrementalPrint -> {
+        final Function<Boolean, String> sentenceIntoRackFunction = incrementalPrint -> {
             for (int i = 0; i < sentence.length(); i++) {
                 char c = sentence.charAt(i);
                 if (!Character.isAlphabetic(c)) {
@@ -64,16 +86,22 @@ public class Main {
         };
 
         if (PERFORMANCE_MEASUREMENT) {
-            final long start = System.currentTimeMillis();
-            final long limit = 100000;
+            final int limit = 10000;
+            final ProgressBar progressBar = new ProgressBar(limit);
+            final long[] performances = new long[limit];
             for (int i = 0; i < limit; i++) {
-                rack = USE_RED_BLACK_LOGIC ? new RedBlackTreeRack() : new BinaryTreeRack();
-                sentenceIntoRack.apply(!PERFORMANCE_MEASUREMENT);
+                final long start = System.currentTimeMillis();
+                progressBar.step();
+                rack = new Rack();
+                sentenceIntoRackFunction.apply(!PERFORMANCE_MEASUREMENT);
+                performances[i] = System.currentTimeMillis() - start;
             }
-            System.out.println("Performance details: With " + rack.getClass().getSimpleName() + " it took an average "
-                + "of " + ((System.currentTimeMillis() - start) / (double) limit) + " milliseconds");
+            System.out.println("Performance details: With " + rack.getClass()
+                .getSimpleName() + " it took an average of " + (Arrays.stream(performances)
+                .reduce(Long::sum)
+                .getAsLong() / (double) limit) + " milliseconds");
         } else {
-            System.out.println(sentenceIntoRack.apply(PERFORMANCE_MEASUREMENT));
+            System.out.println(sentenceIntoRackFunction.apply(PERFORMANCE_MEASUREMENT));
         }
     }
 

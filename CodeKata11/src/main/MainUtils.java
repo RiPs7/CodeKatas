@@ -33,4 +33,43 @@ class MainUtils {
     }
   }
 
+  static class ProgressBar {
+    // This progress bar has 50 visual steps.
+    private long scale;
+    private long current;
+    private long scaledCurrent;
+
+    ProgressBar (long steps) {
+      this.scale = steps / 50;
+      this.current = 0;
+      this.scaledCurrent = 0;
+    }
+
+    void step () {
+      this.current++;
+      if (this.current % this.scale == 0) {
+        this.scaledCurrent++;
+      }
+      this.show();
+    }
+
+    private void show () {
+      System.out.print("[");
+      for (long i = 0; i < this.scaledCurrent; i++) {
+        System.out.print("=");
+      }
+      if (this.scaledCurrent < 50) {
+        System.out.print(">");
+      }
+      for (long i = this.scaledCurrent + 1; i < 50; i++) {
+        System.out.print(" ");
+      }
+      if (this.scaledCurrent >= 50) {
+        System.out.println("] - 100% - Done!");
+      } else {
+        System.out.print("] - " + (scaledCurrent * 2) + "%" + "\r");
+      }
+    }
+  }
+
 }

@@ -1,24 +1,21 @@
-package main.rack.impl;
+package main;
 
-import main.datastructure.impl.RedBlackTree;
-import main.rack.Rack;
+import main.datastructure.RedBlackTree;
 
 import java.util.List;
 
-public class RedBlackTreeRack implements Rack {
+public class Rack {
 
     private RedBlackTree tree;
 
-    public RedBlackTreeRack () {
+    public Rack () {
         tree = new RedBlackTree();
     }
 
-    @Override
     public void add (Object obj) {
         tree.insert(obj);
     }
 
-    @Override
     public List<Object> order () {
         return tree.traverseInOrder();
     }
