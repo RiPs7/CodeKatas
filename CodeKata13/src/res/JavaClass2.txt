@@ -1,0 +1,48 @@
+/*****
+* This is a test program with 12 lines of code
+*  \/* no nesting allowed!
+//*****//***/// Slightly pathological comment ending...
+
+/**
+* This is class javadoc
+*/
+public class JavaClass1 {
+
+    /**
+    This is method javadoc
+    */
+    public static final void main(String [] args) { // gotta love Java
+        // Say hello
+        System./*wait*/out./*for*/println/*it*/("Hello/*");
+
+        /*
+        This is a multiline comment with no code after
+        its ending
+        */
+
+        /*
+        This is another multiline comment with code after
+        its ending
+        */ System.out.println("Hi");
+    }
+
+    // An enum for testing
+    enum test {
+        /** one */
+        one,
+
+        /** two */
+        //2
+        two,
+
+        /** three */
+        /* number 3
+        this is the last one
+        */
+        three
+    }
+
+    // A last line of code
+    /*Test*/System.out.println()/*Test*/
+
+}
