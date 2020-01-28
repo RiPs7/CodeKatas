@@ -59,10 +59,10 @@ public class Main {
 
     private static final int SIZE_LIMIT = 15; // must be less than ~30
 
-    private static final boolean PRINT_FIBBINARIES = false;
+    private static final boolean PRINT_FIBBINARIES = true;
 
     public static void main (String[] args) {
-        final Map<Integer, List<Integer>> allFibbinaries = IntStream.range(1, SIZE_LIMIT)
+        final Map<Integer, List<Integer>> allFibbinaries = IntStream.range(1, SIZE_LIMIT + 1)
             .boxed()
             .map(i -> new AbstractMap.SimpleEntry<>(i, getFibbinaryNumbersForSize(i)))
             .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
