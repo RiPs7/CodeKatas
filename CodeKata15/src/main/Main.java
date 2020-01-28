@@ -1,15 +1,13 @@
 package main;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * The Fibbinary numbers are the numbers that their binary representation does not contain any adjacent 1's.
