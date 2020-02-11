@@ -118,11 +118,11 @@ public class Main {
         finalDependencyMap.get(element).add(currentDependency);
         // Get all the chaining dependencies, add the to them frontier and recalculate the dependencies of the current
         // one
-        final List<String> chainingDepependencies = loadedDependencies.get(currentDependency);
-        if (chainingDepependencies != null) {
-          frontier.addAll(chainingDepependencies);
+        final List<String> chainingDependencies = loadedDependencies.get(currentDependency);
+        if (chainingDependencies != null) {
+          frontier.addAll(chainingDependencies);
           finalDependencyMap.computeIfPresent(currentDependency, (elt, existingDependencies) -> {
-            existingDependencies.addAll(chainingDepependencies);
+            existingDependencies.addAll(chainingDependencies);
             return existingDependencies;
           });
         }
