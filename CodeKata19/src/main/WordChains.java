@@ -3,11 +3,21 @@ package main;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-interface WordChains {
+abstract class WordChains {
 
-    default List<String> getShortestChainBetweenWordsOfLength (final int length) throws Exception {
-        final Set<String> listOfWordsWithSameNumberOfLetters = getSameNumberLetterWords().get(length);
+    Map<Integer, Set<String>> sameNumberLetterWords;
+
+    abstract List<String> algorithm (final String start, final String end)
+        throws Exception;
+
+    List<String> getShortestChainBetweenWords (final String start, final String end) throws Exception {
+        return algorithm(start, end);
+    }
+
+    List<String> getShortestChainBetweenWordsOfLength (final int length) {
+        final Set<String> listOfWordsWithSameNumberOfLetters = sameNumberLetterWords.get(length);
         final int n = listOfWordsWithSameNumberOfLetters.size();
         final MainUtils.ProgressBar progressBar = new MainUtils.ProgressBar((n * n + 1) / 2);
         List<String> shortestChain = null;
@@ -18,7 +28,7 @@ interface WordChains {
                 }
                 progressBar.step();
                 try {
-                    final List<String> chain = getChainBetweenWords(start, end);
+                    final List<String> chain = getShortestChainBetweenWords(start, end);
                     if (shortestChain == null || chain.size() < shortestChain.size()) {
                         shortestChain = chain;
                     }
@@ -30,7 +40,10 @@ interface WordChains {
         return shortestChain;
     }
 
-    List<String> getChainBetweenWords (final String start, final String end) throws Exception;
-
-    Map<Integer, Set<String>> getSameNumberLetterWords ();
+    Set<String> getWordsWithOneLetterDistance (final String word) {
+        return sameNumberLetterWords.get(word.length())
+            .stream()
+            .filter(w -> WordChainUtils.levenshteinDistance(w, word) == 1)
+            .collect(Collectors.toSet());
+    }
 }
