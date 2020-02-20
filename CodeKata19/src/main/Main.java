@@ -2,7 +2,7 @@ package main;
 
 public class Main {
 
-    private static final boolean INTERACTIVE = true;
+    private static final boolean INTERACTIVE = false;
 
     private static final String RESOURCE = "wordlist.txt";
 
@@ -24,16 +24,18 @@ public class Main {
         }
 
         if (INTERACTIVE) {
-            MainUtils.readFromInputAndApplyFunction("Please enter 2 words separated by space", (line) -> {
-                final String[] words = line.split(" ");
+            MainUtils.readFromInputAndApplyFunction("Please enter 2 words:", (line) -> {
+                final String[] words = line.split("[\\s\\t-.,]");
                 try {
-                    wordChains.getChainBetweenWords(words[0], words[1]);
+                    final long start = System.currentTimeMillis();
+                    System.out.println(wordChains.getShortestChainBetweenWords(words[0], words[1]));
+                    System.out.println("It took " + (System.currentTimeMillis() - start) + " ms");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
         } else {
-            wordChains.getShortestChainBetweenWordsOfLength(4);
+            System.out.println(wordChains.getShortestChainBetweenWordsOfLength(4));
         }
 
     }
