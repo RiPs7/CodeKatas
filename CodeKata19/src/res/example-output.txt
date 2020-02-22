@@ -1,0 +1,45 @@
+Please enter 2 words:
+code ruby
+[code, rode, rude, rudy, ruby]
+It took 8520.0ms with BFS
+
+[code, rode, rude, rudy, ruby]
+It took 323.0ms with Enhanced BFS
+
+[code, rode, robe, roby, ruby]
+It took 389.0ms with A Star
+
+Please enter 2 words:
+ruby code
+[ruby, roby, robe, rode, code]
+It took 6156.0ms with BFS
+
+[ruby, roby, robe, rode, code]
+It took 240.0ms with Enhanced BFS
+
+[ruby, roby, robe, rode, code]
+It took 379.0ms with A Star
+
+----------------------------------------
+
+Please enter 2 words:
+chest chase
+[chest, chert, chere, chare, chase]
+It took 2444.0ms with BFS
+
+[chest, chert, chere, chare, chase]
+It took 415.0ms with Enhanced BFS
+
+[chest, chert, chart, chaft, chafe, chase]
+It took 453.0ms with A Star
+
+Please enter 2 words:
+chase chest
+[chase, chare, chere, chert, chest]
+It took 6477.0ms with BFS
+
+[chase, chafe, chaft, chart, chert, chest]
+It took 414.0ms with Enhanced BFS
+
+[chase, chafe, chaft, chart, chert, chest]
+It took 485.0ms with A Star

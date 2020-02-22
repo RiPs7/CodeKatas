@@ -34,6 +34,15 @@ class MainUtils {
     }
   }
 
+  static double timeIt (Runnable functionality, int times) {
+    final long start = System.currentTimeMillis();
+    for (int i = 0; i < times; i++) {
+      functionality.run();
+    }
+    final long end = System.currentTimeMillis();
+    return (end - start) / (double) times;
+  }
+
   static class ProgressBar {
     // This progress bar has 50 visual steps.
     private long scale;

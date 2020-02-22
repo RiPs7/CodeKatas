@@ -2,41 +2,41 @@ package main;
 
 public class Main {
 
-    private static final boolean INTERACTIVE = false;
-
     private static final String RESOURCE = "wordlist.txt";
 
-    private static final GraphAlgorithm ALGORITHM = GraphAlgorithm.A_STAR;
+    public static void main (String[] args) {
 
-    public static void main (String[] args) throws Exception {
+        MainUtils.readFromInputAndApplyFunction("Please enter 2 words:", (line) -> {
+            final String[] words = line.split("[\\s\\t-.,]");
 
-        final WordChains wordChains;
-
-        switch (ALGORITHM) {
-            case BFS:
-                wordChains = new WordChainsBFS(RESOURCE);
-                break;
-            case A_STAR:
-                wordChains = new WordChainsAStar(RESOURCE);
-                break;
-            default:
-                throw new Exception("Unrecognized algorithm " + ALGORITHM);
-        }
-
-        if (INTERACTIVE) {
-            MainUtils.readFromInputAndApplyFunction("Please enter 2 words:", (line) -> {
-                final String[] words = line.split("[\\s\\t-.,]");
+            // BFS is guaranteed to find the shortest chain.
+            System.out.println("It took " + MainUtils.timeIt(() -> {
                 try {
-                    final long start = System.currentTimeMillis();
-                    System.out.println(wordChains.getShortestChainBetweenWords(words[0], words[1]));
-                    System.out.println("It took " + (System.currentTimeMillis() - start) + " ms");
+                    System.out.println(new WordChainsBFS(RESOURCE).getShortestChainBetweenWords(words[0], words[1]));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });
-        } else {
-            System.out.println(wordChains.getShortestChainBetweenWordsOfLength(4));
-        }
+            }, 1) + "ms with BFS\n");
+
+            // An attempt with an enhanced BFS.
+            System.out.println("It took " + MainUtils.timeIt(() -> {
+                try {
+                    System.out.println(
+                        new WordChainsEnhancedBFS(RESOURCE).getShortestChainBetweenWords(words[0], words[1]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, 1) + "ms with Enhanced BFS\n");
+
+            // A Star is meant to be faster.
+            System.out.println("It took " + MainUtils.timeIt(() -> {
+                try {
+                    System.out.println(new WordChainsAStar(RESOURCE).getShortestChainBetweenWords(words[0], words[1]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, 1) + "ms with A Star\n");
+        });
 
     }
 
