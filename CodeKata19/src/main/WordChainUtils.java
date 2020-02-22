@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class WordChainUtils {
+class WordChainUtils {
 
     private static final int INS_DEL_COST = 2;
     private static final int SUBSTITUTION_COST = 1;
